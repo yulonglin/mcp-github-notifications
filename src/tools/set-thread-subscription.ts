@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubPut } from "../utils/api.js";
-import { formatSubscription, formatError } from "../utils/formatters.js";
+import { formatSubscription, successResponse, errorResponse } from "../utils/formatters.js";
 import { ThreadSubscription } from "../types/github-api.js";
 
 /**
@@ -34,20 +34,9 @@ export async function setThreadSubscriptionHandler(args: z.infer<typeof setThrea
     const formattedSubscription = formatSubscription(subscription);
     const status = args.ignored ? "ignoring" : "subscribing to";
 
-    return {
-      content: [{
-        type: "text",
-        text: `Successfully updated subscription by ${status} thread ${args.thread_id}:\n\n${formattedSubscription}`
-      }]
-    };
-  } catch (error) {
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to update subscription for thread ${args.thread_id}`, error)
-      }]
-    };
+    return successResponse(`Successfully updated subscription by ${status} thread ${args.thread_id}:\n\n${formattedSubscription}`);
+  } catch (error: unknown) {
+    return errorResponse(`Failed to update subscription for thread ${args.thread_id}`, error);
   }
 }
 

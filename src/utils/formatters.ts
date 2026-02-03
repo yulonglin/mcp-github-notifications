@@ -86,3 +86,30 @@ export function formatError(message: string, error: unknown): string {
     return `${message}: Unknown error`;
   }
 }
+
+/**
+ * Tool response type definition
+ */
+export interface ToolResponse {
+  isError?: boolean;
+  content: Array<{ type: "text"; text: string }>;
+}
+
+/**
+ * Creates a successful tool response
+ */
+export function successResponse(text: string): ToolResponse {
+  return {
+    content: [{ type: "text", text }]
+  };
+}
+
+/**
+ * Creates an error tool response
+ */
+export function errorResponse(message: string, error: unknown): ToolResponse {
+  return {
+    isError: true,
+    content: [{ type: "text", text: formatError(message, error) }]
+  };
+}

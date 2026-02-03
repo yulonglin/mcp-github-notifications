@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubGet } from "../utils/api.js";
-import { formatNotification, formatError } from "../utils/formatters.js";
+import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
 
 /**
@@ -24,20 +24,9 @@ export async function getThreadHandler(args: z.infer<typeof getThreadSchema>) {
     // Format the thread for better readability
     const formattedThread = formatNotification(thread);
 
-    return {
-      content: [{
-        type: "text",
-        text: `Thread details:\n\n${formattedThread}`
-      }]
-    };
-  } catch (error) {
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to fetch thread ${args.thread_id}`, error)
-      }]
-    };
+    return successResponse(`Thread details:\n\n${formattedThread}`);
+  } catch (error: unknown) {
+    return errorResponse(`Failed to fetch thread ${args.thread_id}`, error);
   }
 }
 

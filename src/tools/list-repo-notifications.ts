@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubGet } from "../utils/api.js";
-import { formatNotification, formatError } from "../utils/formatters.js";
+import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
 
 /**
@@ -42,41 +42,25 @@ export async function listRepoNotificationsHandler(args: z.infer<typeof listRepo
 
     // If no notifications, return simple message
     if (notifications.length === 0) {
-      return {
-        content: [{
-          type: "text",
-          text: `No notifications found for repository ${args.owner}/${args.repo} with the given criteria.`
-        }]
-      };
+      return successResponse(`No notifications found for repository ${args.owner}/${args.repo} with the given criteria.`);
     }
 
     // Format the notifications for better readability
     const formattedNotifications = notifications.map(formatNotification).join("\n\n");
-    
+
     // Check for pagination - simplified approach without headers
     let paginationInfo = "";
-    
+
     if (notifications.length === perPage) {
-      paginationInfo = "\n\nMore notifications may be available. You can view the next page by specifying 'page: " + 
+      paginationInfo = "\n\nMore notifications may be available. You can view the next page by specifying 'page: " +
         (page + 1) + "' in the request.";
     }
 
-    return {
-      content: [{
-        type: "text",
-        text: `${notifications.length} notifications found for repository ${args.owner}/${args.repo}:
+    return successResponse(`${notifications.length} notifications found for repository ${args.owner}/${args.repo}:
 
-${formattedNotifications}${paginationInfo}`
-      }]
-    };
-  } catch (error) {
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to fetch notifications for repository ${args.owner}/${args.repo}`, error)
-      }]
-    };
+${formattedNotifications}${paginationInfo}`);
+  } catch (error: unknown) {
+    return errorResponse(`Failed to fetch notifications for repository ${args.owner}/${args.repo}`, error);
   }
 }
 

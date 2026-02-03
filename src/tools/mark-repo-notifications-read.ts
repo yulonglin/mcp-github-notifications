@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubPut } from "../utils/api.js";
-import { formatError } from "../utils/formatters.js";
+import { successResponse, errorResponse } from "../utils/formatters.js";
 import { MarkNotificationsReadResponse } from "../types/github-api.js";
 
 /**
@@ -39,33 +39,17 @@ export async function markRepoNotificationsReadHandler(args: z.infer<typeof mark
 
     // Check if notifications are processed asynchronously
     if (response.message) {
-      return {
-        content: [{
-          type: "text",
-          text: `${response.message}`
-        }]
-      };
+      return successResponse(`${response.message}`);
     }
 
     // Default success message
-    return {
-      content: [{
-        type: "text",
-        text: `Successfully marked notifications for repository ${args.owner}/${args.repo} as ${args.read ? 'read' : 'unread'}.${
-          args.last_read_at 
-            ? ` Notifications updated on or before ${new Date(args.last_read_at).toLocaleString()} were affected.` 
-            : ''
-        }`
-      }]
-    };
-  } catch (error) {
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to mark notifications as read for repository ${args.owner}/${args.repo}`, error)
-      }]
-    };
+    return successResponse(`Successfully marked notifications for repository ${args.owner}/${args.repo} as ${args.read ? 'read' : 'unread'}.${
+      args.last_read_at
+        ? ` Notifications updated on or before ${new Date(args.last_read_at).toLocaleString()} were affected.`
+        : ''
+    }`);
+  } catch (error: unknown) {
+    return errorResponse(`Failed to mark notifications as read for repository ${args.owner}/${args.repo}`, error);
   }
 }
 

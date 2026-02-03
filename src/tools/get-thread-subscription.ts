@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubGet } from "../utils/api.js";
-import { formatSubscription, formatError } from "../utils/formatters.js";
+import { formatSubscription, successResponse, errorResponse } from "../utils/formatters.js";
 import { ThreadSubscription } from "../types/github-api.js";
 
 /**
@@ -24,29 +24,13 @@ export async function getThreadSubscriptionHandler(args: z.infer<typeof getThrea
     // Format the subscription for better readability
     const formattedSubscription = formatSubscription(subscription);
 
-    return {
-      content: [{
-        type: "text",
-        text: `Subscription status for thread ${args.thread_id}:\n\n${formattedSubscription}`
-      }]
-    };
-  } catch (error) {
+    return successResponse(`Subscription status for thread ${args.thread_id}:\n\n${formattedSubscription}`);
+  } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("404")) {
-      return {
-        content: [{
-          type: "text",
-          text: `You are not subscribed to thread ${args.thread_id}.`
-        }]
-      };
+      return successResponse(`You are not subscribed to thread ${args.thread_id}.`);
     }
-    
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to fetch subscription for thread ${args.thread_id}`, error)
-      }]
-    };
+
+    return errorResponse(`Failed to fetch subscription for thread ${args.thread_id}`, error);
   }
 }
 

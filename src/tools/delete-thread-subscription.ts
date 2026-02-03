@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubDelete } from "../utils/api.js";
-import { formatError } from "../utils/formatters.js";
+import { successResponse, errorResponse } from "../utils/formatters.js";
 
 /**
  * Schema for delete-thread-subscription tool input parameters
@@ -17,32 +17,14 @@ export const deleteThreadSubscriptionSchema = z.object({
  */
 export async function deleteThreadSubscriptionHandler(args: z.infer<typeof deleteThreadSubscriptionSchema>) {
   try {
-    // Make request to GitHub API
     await githubDelete(`/notifications/threads/${args.thread_id}/subscription`);
-
-    return {
-      content: [{
-        type: "text",
-        text: `Successfully unsubscribed from thread ${args.thread_id}.`
-      }]
-    };
-  } catch (error) {
+    return successResponse(`Successfully unsubscribed from thread ${args.thread_id}.`);
+  } catch (error: unknown) {
     if (error instanceof Error && error.message.includes("404")) {
-      return {
-        content: [{
-          type: "text",
-          text: `You were not subscribed to thread ${args.thread_id}.`
-        }]
-      };
+      return successResponse(`You were not subscribed to thread ${args.thread_id}.`);
     }
-    
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to unsubscribe from thread ${args.thread_id}`, error)
-      }]
-    };
+
+    return errorResponse(`Failed to unsubscribe from thread ${args.thread_id}`, error);
   }
 }
 

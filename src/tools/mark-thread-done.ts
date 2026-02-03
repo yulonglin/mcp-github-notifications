@@ -3,7 +3,7 @@
  */
 import { z } from "zod";
 import { githubDelete } from "../utils/api.js";
-import { formatError } from "../utils/formatters.js";
+import { successResponse, errorResponse } from "../utils/formatters.js";
 
 /**
  * Schema for mark-thread-done tool input parameters
@@ -17,23 +17,10 @@ export const markThreadDoneSchema = z.object({
  */
 export async function markThreadDoneHandler(args: z.infer<typeof markThreadDoneSchema>) {
   try {
-    // Make request to GitHub API
     await githubDelete(`/notifications/threads/${args.thread_id}`);
-
-    return {
-      content: [{
-        type: "text",
-        text: `Successfully marked thread ${args.thread_id} as done.`
-      }]
-    };
-  } catch (error) {
-    return {
-      isError: true,
-      content: [{
-        type: "text",
-        text: formatError(`Failed to mark thread ${args.thread_id} as done`, error)
-      }]
-    };
+    return successResponse(`Successfully marked thread ${args.thread_id} as done.`);
+  } catch (error: unknown) {
+    return errorResponse(`Failed to mark thread ${args.thread_id} as done`, error);
   }
 }
 

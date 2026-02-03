@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { githubPut, githubDelete, githubGet } from '../utils/api.js';
-import { formatError } from '../utils/formatters.js';
+import { successResponse, errorResponse } from '../utils/formatters.js';
 
 /**
  * Schema for manage-repo-subscription tool input parameters
@@ -44,28 +44,18 @@ export async function manageRepoSubscriptionHandler(args: ManageRepoSubscription
                 try {
                     const response = await githubGet<SubscriptionResponse>(`/repos/${owner}/${repo}/subscription`);
                     const formattedDate = new Date(response.created_at).toLocaleString();
-                    return {
-                        content: [{
-                            type: 'text',
-                            text: `Subscription status for ${owner}/${repo}:
+                    return successResponse(`Subscription status for ${owner}/${repo}:
 • API Subscription: ${response.subscribed ? 'Watching all activity' : 'Not watching'}
 • Notifications: ${response.ignored ? 'Ignored' : 'Active'}
 • Created at: ${formattedDate}
-• Web Interface: https://github.com/${owner}/${repo}`
-                        }]
-                    };
-                } catch (error: any) {
+• Web Interface: https://github.com/${owner}/${repo}`);
+                } catch (error: unknown) {
                     // Special handling for 404 in get action - could be default or custom settings
-                    if (error.message?.includes('Resource not found')) {
-                        return {
-                            content: [{
-                                type: 'text',
-                                text: `Subscription status for ${owner}/${repo}:
+                    if (error instanceof Error && error.message?.includes('Resource not found')) {
+                        return successResponse(`Subscription status for ${owner}/${repo}:
 • Default settings (participating and @mentions only)
 • or Custom through the GitHub web interface at:
-  https://github.com/${owner}/${repo}`
-                            }]
-                        };
+  https://github.com/${owner}/${repo}`);
                     }
                     throw error; // Re-throw other errors to be handled by the outer catch
                 }
@@ -75,42 +65,21 @@ export async function manageRepoSubscriptionHandler(args: ManageRepoSubscription
                     subscribed: true,
                     ignored: false
                 });
-                return {
-                    content: [{
-                        type: 'text',
-                        text: `Successfully set ${owner}/${repo} to watch all activity`
-                    }]
-                };
+                return successResponse(`Successfully set ${owner}/${repo} to watch all activity`);
 
             case 'default':
                 await githubDelete(`/repos/${owner}/${repo}/subscription`);
-                return {
-                    content: [{
-                        type: 'text',
-                        text: `Successfully set ${owner}/${repo} to default settings (participating and @mentions only)`
-                    }]
-                };
+                return successResponse(`Successfully set ${owner}/${repo} to default settings (participating and @mentions only)`);
 
             case 'ignore':
                 await githubPut(`/repos/${owner}/${repo}/subscription`, {
                     subscribed: false,
                     ignored: true
                 });
-                return {
-                    content: [{
-                        type: 'text',
-                        text: `Successfully set ${owner}/${repo} to ignore all notifications`
-                    }]
-                };
+                return successResponse(`Successfully set ${owner}/${repo} to ignore all notifications`);
         }
-    } catch (error: any) {
-        return {
-            isError: true,
-            content: [{
-                type: 'text',
-                text: formatError(`Failed to manage repository subscription for ${owner}/${repo}`, error)
-            }]
-        };
+    } catch (error: unknown) {
+        return errorResponse(`Failed to manage repository subscription for ${owner}/${repo}`, error);
     }
 }
 
