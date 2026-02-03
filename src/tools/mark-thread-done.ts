@@ -4,12 +4,13 @@
 import { z } from "zod";
 import { githubDelete } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for mark-thread-done tool input parameters
  */
 export const markThreadDoneSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to mark as done")
+  thread_id: threadIdSchema
 });
 
 /**

@@ -4,12 +4,13 @@
 import { z } from "zod";
 import { githubPatch } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for mark-thread-read tool input parameters
  */
 export const markThreadReadSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to mark as read")
+  thread_id: threadIdSchema
 });
 
 /**

@@ -5,12 +5,13 @@ import { z } from "zod";
 import { githubPut } from "../utils/api.js";
 import { formatSubscription, successResponse, errorResponse } from "../utils/formatters.js";
 import { ThreadSubscription } from "../types/github-api.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for set-thread-subscription tool input parameters
  */
 export const setThreadSubscriptionSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to subscribe to"),
+  thread_id: threadIdSchema,
   ignored: z.boolean().optional().default(false).describe("If true, notifications will be ignored")
 });
 

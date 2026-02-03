@@ -5,12 +5,13 @@ import { z } from "zod";
 import { githubGet } from "../utils/api.js";
 import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for get-thread tool input parameters
  */
 export const getThreadSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to retrieve")
+  thread_id: threadIdSchema
 });
 
 /**

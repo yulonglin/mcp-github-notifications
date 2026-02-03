@@ -5,18 +5,12 @@ import { z } from "zod";
 import { githubGet } from "../utils/api.js";
 import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
+import { notificationFilterSchema } from "../utils/schemas.js";
 
 /**
  * Schema for list-notifications tool input parameters
  */
-export const listNotificationsSchema = z.object({
-  all: z.boolean().optional().describe("If true, show notifications marked as read"),
-  participating: z.boolean().optional().describe("If true, only shows notifications where user is directly participating"),
-  since: z.string().optional().describe("ISO 8601 timestamp - only show notifications updated after this time"),
-  before: z.string().optional().describe("ISO 8601 timestamp - only show notifications updated before this time"),
-  page: z.number().optional().describe("Page number for pagination"),
-  per_page: z.number().optional().describe("Number of results per page (max 100)")
-});
+export const listNotificationsSchema = z.object(notificationFilterSchema);
 
 /**
  * Tool implementation for listing GitHub notifications

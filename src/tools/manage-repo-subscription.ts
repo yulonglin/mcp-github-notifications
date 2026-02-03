@@ -1,15 +1,13 @@
 import { z } from 'zod';
 import { githubPut, githubDelete, githubGet } from '../utils/api.js';
 import { successResponse, errorResponse } from '../utils/formatters.js';
+import { repoIdentifierSchema } from '../utils/schemas.js';
 
 /**
  * Schema for manage-repo-subscription tool input parameters
  */
 export const manageRepoSubscriptionSchema = z.object({
-    owner: z.string().min(1, 'Repository owner is required')
-        .describe('The account owner of the repository. The name is not case sensitive.'),
-    repo: z.string().min(1, 'Repository name is required')
-        .describe('The name of the repository without the .git extension. The name is not case sensitive.'),
+    ...repoIdentifierSchema,
     action: z.enum(['all_activity', 'default', 'ignore', 'get'])
         .describe('The action to perform: all_activity (watch all), default (participating and @mentions only), ignore (mute notifications), or get (view current settings)'),
     options: z.object({

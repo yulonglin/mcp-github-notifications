@@ -5,12 +5,13 @@ import { z } from "zod";
 import { githubPut } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { MarkNotificationsReadResponse } from "../types/github-api.js";
+import { timestampSchema } from "../utils/schemas.js";
 
 /**
  * Schema for mark-notifications-read tool input parameters
  */
 export const markNotificationsReadSchema = z.object({
-  last_read_at: z.string().optional().describe(
+  last_read_at: timestampSchema.optional().describe(
     "ISO 8601 timestamp - marks notifications updated at or before this time as read. Default is current time."
   ),
   read: z.boolean().optional().default(true).describe(

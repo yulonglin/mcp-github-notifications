@@ -5,12 +5,13 @@ import { z } from "zod";
 import { githubGet } from "../utils/api.js";
 import { formatSubscription, successResponse, errorResponse } from "../utils/formatters.js";
 import { ThreadSubscription } from "../types/github-api.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for get-thread-subscription tool input parameters
  */
 export const getThreadSubscriptionSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to check subscription status")
+  thread_id: threadIdSchema
 });
 
 /**

@@ -4,12 +4,13 @@
 import { z } from "zod";
 import { githubDelete } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
+import { threadIdSchema } from "../utils/schemas.js";
 
 /**
  * Schema for delete-thread-subscription tool input parameters
  */
 export const deleteThreadSubscriptionSchema = z.object({
-  thread_id: z.string().describe("The ID of the notification thread to unsubscribe from")
+  thread_id: threadIdSchema
 });
 
 /**

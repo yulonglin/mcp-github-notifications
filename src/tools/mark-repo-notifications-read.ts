@@ -5,14 +5,14 @@ import { z } from "zod";
 import { githubPut } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { MarkNotificationsReadResponse } from "../types/github-api.js";
+import { repoIdentifierSchema, timestampSchema } from "../utils/schemas.js";
 
 /**
  * Schema for mark-repo-notifications-read tool input parameters
  */
 export const markRepoNotificationsReadSchema = z.object({
-  owner: z.string().describe("The account owner of the repository"),
-  repo: z.string().describe("The name of the repository"),
-  last_read_at: z.string().optional().describe(
+  ...repoIdentifierSchema,
+  last_read_at: timestampSchema.optional().describe(
     "ISO 8601 timestamp - marks notifications updated at or before this time as read. Default is current time."
   ),
   read: z.boolean().optional().default(true).describe(
