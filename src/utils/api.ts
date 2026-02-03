@@ -17,10 +17,15 @@ const DEFAULT_HEADERS = {
 };
 
 /**
+ * Valid parameter value types for API requests
+ */
+export type ParamValue = string | number | boolean | undefined;
+
+/**
  * Interface for request options
  */
 export interface RequestOptions {
-  params?: Record<string, any>;
+  params?: Record<string, ParamValue>;
   headers?: Record<string, string>;
 }
 
@@ -81,9 +86,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
 /**
  * Builds a URL with query parameters
  */
-function buildUrl(path: string, params?: Record<string, any>): string {
+function buildUrl(path: string, params?: Record<string, ParamValue>): string {
   const url = new URL(path, BASE_URL);
-  
+
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -91,18 +96,18 @@ function buildUrl(path: string, params?: Record<string, any>): string {
       }
     });
   }
-  
+
   return url.toString();
 }
 
 /**
  * Makes a GET request to the GitHub API
- * 
+ *
  * @param path API endpoint path
  * @param options Request options
  * @returns Promise with the API response
  */
-export async function githubGet<T = any>(path: string, options: RequestOptions = {}): Promise<T> {
+export async function githubGet<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
   const url = buildUrl(path, options.params);
   
   const response = await fetch(url, {
@@ -124,7 +129,7 @@ export async function githubGet<T = any>(path: string, options: RequestOptions =
  * @param options Request options
  * @returns Promise with the API response
  */
-export async function githubPut<T = any>(path: string, data?: any, options: RequestOptions = {}): Promise<T> {
+export async function githubPut<T = unknown>(path: string, data?: any, options: RequestOptions = {}): Promise<T> {
   const url = buildUrl(path, options.params);
   
   const response = await fetch(url, {
@@ -148,7 +153,7 @@ export async function githubPut<T = any>(path: string, data?: any, options: Requ
  * @param options Request options
  * @returns Promise with the API response
  */
-export async function githubPatch<T = any>(path: string, data?: any, options: RequestOptions = {}): Promise<T> {
+export async function githubPatch<T = unknown>(path: string, data?: any, options: RequestOptions = {}): Promise<T> {
   const url = buildUrl(path, options.params);
   
   const response = await fetch(url, {
@@ -171,7 +176,7 @@ export async function githubPatch<T = any>(path: string, data?: any, options: Re
  * @param options Request options
  * @returns Promise with the API response
  */
-export async function githubDelete<T = any>(path: string, options: RequestOptions = {}): Promise<T> {
+export async function githubDelete<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
   const url = buildUrl(path, options.params);
   
   const response = await fetch(url, {
