@@ -2,6 +2,7 @@
  * Tool implementation for marking GitHub notifications as read
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubPut } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { MarkNotificationsReadResponse } from "../types/github-api.js";
@@ -52,7 +53,7 @@ export async function markNotificationsReadHandler(args: z.infer<typeof markNoti
 /**
  * Register this tool with the server
  */
-export function registerMarkNotificationsReadTool(server: any) {
+export function registerMarkNotificationsReadTool(server: McpServer): void {
   server.tool(
     "mark-notifications-read",
     "Mark GitHub notifications as read",

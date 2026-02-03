@@ -2,6 +2,7 @@
  * Tool implementation for listing repository notifications
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubGet } from "../utils/api.js";
 import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
@@ -62,7 +63,7 @@ ${formattedNotifications}${paginationInfo}`);
 /**
  * Register this tool with the server
  */
-export function registerListRepoNotificationsTool(server: any) {
+export function registerListRepoNotificationsTool(server: McpServer): void {
   server.tool(
     "list-repo-notifications",
     "List GitHub notifications for a specific repository",

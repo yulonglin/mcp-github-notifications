@@ -91,6 +91,7 @@ export function formatError(message: string, error: unknown): string {
  * Tool response type definition
  */
 export interface ToolResponse {
+  [x: string]: unknown;
   isError?: boolean;
   content: Array<{ type: "text"; text: string }>;
 }

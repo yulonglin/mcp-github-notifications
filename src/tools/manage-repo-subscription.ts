@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubPut, githubDelete, githubGet } from '../utils/api.js';
 import { successResponse, errorResponse } from '../utils/formatters.js';
 import { repoIdentifierSchema } from '../utils/schemas.js';
@@ -84,7 +85,7 @@ export async function manageRepoSubscriptionHandler(args: ManageRepoSubscription
 /**
  * Register this tool with the server
  */
-export function registerManageRepoSubscriptionTool(server: any) {
+export function registerManageRepoSubscriptionTool(server: McpServer): void {
     server.tool(
         'manage-repo-subscription',
         'Manage repository subscription settings including fine-grained notification preferences',

@@ -2,6 +2,7 @@
  * Tool implementation for setting a GitHub thread subscription
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubPut } from "../utils/api.js";
 import { formatSubscription, successResponse, errorResponse } from "../utils/formatters.js";
 import { ThreadSubscription } from "../types/github-api.js";
@@ -44,7 +45,7 @@ export async function setThreadSubscriptionHandler(args: z.infer<typeof setThrea
 /**
  * Register this tool with the server
  */
-export function registerSetThreadSubscriptionTool(server: any) {
+export function registerSetThreadSubscriptionTool(server: McpServer): void {
   server.tool(
     "set-thread-subscription",
     "Subscribe to a GitHub notification thread",

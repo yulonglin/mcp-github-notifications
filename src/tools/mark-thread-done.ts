@@ -2,6 +2,7 @@
  * Tool implementation for marking a GitHub notification thread as done
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubDelete } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { threadIdSchema } from "../utils/schemas.js";
@@ -28,7 +29,7 @@ export async function markThreadDoneHandler(args: z.infer<typeof markThreadDoneS
 /**
  * Register this tool with the server
  */
-export function registerMarkThreadDoneTool(server: any) {
+export function registerMarkThreadDoneTool(server: McpServer): void {
   server.tool(
     "mark-thread-done",
     "Mark a GitHub notification thread as done",

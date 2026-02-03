@@ -2,6 +2,7 @@
  * Tool implementation for marking a GitHub notification thread as read
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubPatch } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { threadIdSchema } from "../utils/schemas.js";
@@ -28,7 +29,7 @@ export async function markThreadReadHandler(args: z.infer<typeof markThreadReadS
 /**
  * Register this tool with the server
  */
-export function registerMarkThreadReadTool(server: any) {
+export function registerMarkThreadReadTool(server: McpServer): void {
   server.tool(
     "mark-thread-read",
     "Mark a GitHub notification thread as read",

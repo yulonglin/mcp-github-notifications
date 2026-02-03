@@ -2,6 +2,7 @@
  * Tool implementation for getting a GitHub notification thread
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubGet } from "../utils/api.js";
 import { formatNotification, successResponse, errorResponse } from "../utils/formatters.js";
 import { NotificationResponse } from "../types/github-api.js";
@@ -34,7 +35,7 @@ export async function getThreadHandler(args: z.infer<typeof getThreadSchema>) {
 /**
  * Register this tool with the server
  */
-export function registerGetThreadTool(server: any) {
+export function registerGetThreadTool(server: McpServer): void {
   server.tool(
     "get-thread",
     "Get information about a GitHub notification thread",

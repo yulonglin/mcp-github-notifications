@@ -2,6 +2,7 @@
  * Tool implementation for deleting a GitHub thread subscription
  */
 import { z } from "zod";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { githubDelete } from "../utils/api.js";
 import { successResponse, errorResponse } from "../utils/formatters.js";
 import { threadIdSchema } from "../utils/schemas.js";
@@ -32,7 +33,7 @@ export async function deleteThreadSubscriptionHandler(args: z.infer<typeof delet
 /**
  * Register this tool with the server
  */
-export function registerDeleteThreadSubscriptionTool(server: any) {
+export function registerDeleteThreadSubscriptionTool(server: McpServer): void {
   server.tool(
     "delete-thread-subscription",
     "Unsubscribe from a GitHub notification thread",
