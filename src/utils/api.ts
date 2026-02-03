@@ -2,12 +2,6 @@
  * API client for GitHub API requests using fetch
  */
 
-// Check for required environment variable
-if (!process.env.GITHUB_TOKEN) {
-  console.error("Error: GITHUB_TOKEN environment variable is required");
-  process.exit(1);
-}
-
 const BASE_URL = "https://api.github.com";
 const DEFAULT_HEADERS = {
   "Accept": "application/vnd.github+json",

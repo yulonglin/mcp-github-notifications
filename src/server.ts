@@ -25,7 +25,7 @@ export async function startServer() {
     // Create MCP server
     const server = new McpServer({
       name: "github-notifications",
-      version: "1.0.0"
+      version: "1.1.0"
     }, {
       capabilities: {
         tools: {}

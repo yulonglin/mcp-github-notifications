@@ -10,14 +10,7 @@ import { repoIdentifierSchema } from '../utils/schemas.js';
 export const manageRepoSubscriptionSchema = z.object({
     ...repoIdentifierSchema,
     action: z.enum(['all_activity', 'default', 'ignore', 'get'])
-        .describe('The action to perform: all_activity (watch all), default (participating and @mentions only), ignore (mute notifications), or get (view current settings)'),
-    options: z.object({
-        subscribed: z.boolean().optional()
-            .describe('Whether to receive notifications from this repository'),
-        ignored: z.boolean().optional()
-            .describe('Whether to ignore all notifications from this repository')
-    }).optional()
-        .describe('Optional settings for custom subscription configuration')
+        .describe('The action to perform: all_activity (watch all), default (participating and @mentions only), ignore (mute notifications), or get (view current settings)')
 });
 
 export type ManageRepoSubscriptionArgs = z.infer<typeof manageRepoSubscriptionSchema>;
@@ -35,7 +28,7 @@ interface SubscriptionResponse {
  * Tool implementation for managing repository subscriptions
  */
 export async function manageRepoSubscriptionHandler(args: ManageRepoSubscriptionArgs) {
-    const { owner, repo, action, options } = args;
+    const { owner, repo, action } = args;
 
     try {
         switch (action) {
