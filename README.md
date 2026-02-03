@@ -14,7 +14,7 @@ An MCP (Model Context Protocol) server that provides tools for managing GitHub n
 
 ## Prerequisites
 
-- Node.js 18 or higher
+- Bun 1.0 or higher (or Node.js 18+ as fallback)
 - GitHub Personal Access Token (classic) with `notifications` or `repo` scope
 
 ## Installation
@@ -27,12 +27,12 @@ An MCP (Model Context Protocol) server that provides tools for managing GitHub n
 
 2. Install dependencies
    ```
-   npm install
+   bun install
    ```
 
 3. Build the project
    ```
-   npm run build
+   bun run build
    ```
 
 4. Create a `.env` file with your GitHub token
@@ -45,7 +45,7 @@ An MCP (Model Context Protocol) server that provides tools for managing GitHub n
 ### Running the server directly
 
 ```
-npm start
+bun start
 ```
 
 ### Using with Claude Desktop
@@ -56,7 +56,7 @@ Add the server to your `claude_desktop_config.json` file:
 {
   "mcpServers": {
     "github-notifications": {
-      "command": "node",
+      "command": "bun",
       "args": ["/absolute/path/to/github-notifications-mcp-server/build/index.js"],
       "env": {
         "GITHUB_TOKEN": "your_github_personal_access_token_here"
@@ -132,7 +132,7 @@ github-notifications-mcp-server/
 ### Building
 
 ```
-npm run build
+bun run build
 ```
 
 ### Testing
@@ -140,13 +140,13 @@ npm run build
 Run the automated tests:
 
 ```
-npm test
+bun test
 ```
 
 Test URL conversion manually:
 
 ```
-npm run test:url
+bun run test:url
 ```
 
 ## License

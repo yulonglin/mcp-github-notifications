@@ -5,11 +5,11 @@
   "type": "module",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node build/index.js",
-    "dev": "tsc -w",
-    "test": "jest",
-    "test:url": "tsx src/scripts/test-url-conversion.ts"
+    "build": "bun run tsc",
+    "start": "bun build/index.js",
+    "dev": "bun run tsc -w",
+    "test": "bun test",
+    "test:url": "bun src/scripts/test-url-conversion.ts"
   },
   "keywords": [
     "github",
